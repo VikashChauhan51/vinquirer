@@ -1,13 +1,19 @@
-﻿using VInquirer.Console;
+﻿using System.Net.Http.Headers;
+using VInquirer.Console;
 using VInquirer.Validators;
 
 namespace VInquirer.Prompts;
 public class Input : BasePrompt
 {
     private string answer;
-    private bool isValid = true;
-    public Input(string name, string message, IValidator? validator = null, IScreenManager? consoleRender = null) : base(name, message, validator, consoleRender)
+    protected bool isValid = true;
+    public Input(string name, string message,
+        InquirerSettings? settings = null,
+        IValidator? validator = null,
+        IScreenManager? consoleRender = null) :
+        base(name, message, settings, validator, consoleRender)
     {
+        answer = string.Empty;
     }
 
     public override string Answer()
@@ -40,15 +46,18 @@ public class Input : BasePrompt
         return consoleRender.ReadLine();
     }
 
-    public override string[] GetQuestion()
+    public override Parm[] GetQuestion()
     {
-        return new[] { message };
+        return new Parm[] { new Parm(message, settings.QuestionTextColor, settings.BackgroundColor) };
     }
 
     public override int[] Render()
     {
-        var bottomContent = new List<string>();
-        if (!isValid && validator is not null) bottomContent.Add(validator!.GetErrorMessage());
+        var bottomContent = new List<Parm>();
+        if (!isValid && validator is not null)
+        {
+            bottomContent.Add(new Parm(validator!.GetErrorMessage(), settings.ErrorTextColor, settings.BackgroundColor));
+        }
 
         return consoleRender.Render(GetQuestion(), bottomContent.ToArray());
     }

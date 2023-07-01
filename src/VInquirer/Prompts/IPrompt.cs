@@ -1,8 +1,10 @@
-﻿namespace VInquirer.Prompts;
+﻿using VInquirer.Console;
+
+namespace VInquirer.Prompts;
 public interface IPrompt
 {
     int[] Render();
-    string[] GetQuestion();
+    Parm[] GetQuestion();
     string Answer();
     void Ask();
     bool IsValidAnswer(string answer);

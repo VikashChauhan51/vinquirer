@@ -8,9 +8,11 @@ public abstract class BasePrompt : IPrompt
     public string message { private set; get; }
     protected readonly IValidator? validator;
     protected readonly IScreenManager consoleRender;
-
-    public BasePrompt(string name, string message, IValidator? validator = null, IScreenManager? consoleRender = null)
+    protected readonly InquirerSettings
+      settings;
+    public BasePrompt(string name, string message, InquirerSettings? settings, IValidator? validator = null, IScreenManager? consoleRender = null)
     {
+        this.settings = settings ?? new InquirerSettings();
         this.name = name;
         this.message = message;
         this.validator = validator;
@@ -22,7 +24,7 @@ public abstract class BasePrompt : IPrompt
         return validator?.Validate(answer) ?? true;
     }
 
-    public abstract string[] GetQuestion();
+    public abstract Parm[] GetQuestion();
     public abstract int[] Render();
     public abstract string Answer();
     public abstract void Ask();

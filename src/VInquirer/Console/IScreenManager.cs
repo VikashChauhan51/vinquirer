@@ -1,8 +1,8 @@
 ﻿namespace VInquirer.Console;
 public interface IScreenManager
 {
-    int[,] RenderMultipleMessages(string[] messages);
-    int[] Render(string[] content, string[] bottomContent);
+    int[,] RenderMultipleMessages(Parm[] messages);
+    int[] Render(Parm[] content, Parm[] bottomContent);
     void Clean(int initialPos, int endPos);
     string ReadLine();
     void Newline();

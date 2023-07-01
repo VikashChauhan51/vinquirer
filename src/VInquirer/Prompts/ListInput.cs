@@ -9,7 +9,11 @@ public class ListInput : BasePrompt
     private string answer;
     private int selectedOption = 0;
     private string[] options;
-    public ListInput(string name, string message, string[] options, IValidator? validator = null, IScreenManager? consoleRender = null) : base(name, message, validator, consoleRender)
+    public ListInput(string name, string message, string[] options,
+        InquirerSettings? settings = null,
+        IValidator? validator = null,
+        IScreenManager? consoleRender = null) :
+        base(name, message, settings, validator, consoleRender)
     {
         this.options = options;
         this.answer = string.Empty;
@@ -44,7 +48,7 @@ public class ListInput : BasePrompt
         answer = (selectedOption + 1).ToString();
     }
 
-    public override string[] GetQuestion()
+    public override Parm[] GetQuestion()
     {
         var question = new string[options.Length + 1];
         question[0] = message;
@@ -52,11 +56,17 @@ public class ListInput : BasePrompt
 
         question[selectedOption + 1] = "> " + question[selectedOption + 1];
 
-        return question;
+        var parm = new Parm[options.Length + 1];
+        for (int i = 0; i < question.Length; i++)
+        {
+            parm[i] = new Parm(question[i], i == 0 ? settings.QuestionTextColor : i == (selectedOption + 1) ? settings.SelectedOptionTextColor: settings.OptionTextColor, settings.BackgroundColor);
+        }
+
+        return parm;
     }
 
     public override int[] Render()
     {
-        return consoleRender.Render(GetQuestion(), new string[] { });
+        return consoleRender.Render(GetQuestion(), new Parm[] { });
     }
 }

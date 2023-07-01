@@ -11,11 +11,15 @@ public class ConsoleManager : IScreenManager
         observable = new ConsoleObservable(this.console);
     }
 
-    public int[] Render(string[] content, string[] bottomContent)
+    public int[] Render(Parm[] content, Parm[] bottomContent)
     {
-        content.ToList().ForEach(message => console.WriteLine(message));
+        if (bottomContent.Length == 0)
+        {
+            content.ToList().ForEach(message => WriteMessage(message));
+        }
+
         Newline();
-        bottomContent.ToList().ForEach(message => console.WriteLine(message));
+        bottomContent.ToList().ForEach(message => WriteMessage(message));
         console.CursorTop = console.CursorTop - (bottomContent.Length + 1);
         return new[] { content.Length, bottomContent.Length };
     }
@@ -36,12 +40,12 @@ public class ConsoleManager : IScreenManager
         console.CursorLeft = 0;
     }
 
-    public int[,] RenderMultipleMessages(string[] mensagens)
+    public int[,] RenderMultipleMessages(Parm[] mensagens)
     {
         var pos = new int[2, 2];
         pos[0, 0] = console.CursorLeft;
         pos[0, 1] = console.CursorTop;
-        mensagens.ToList().ForEach(mensagem => console.WriteLine(mensagem));
+        mensagens.ToList().ForEach(mensagem => WriteMessage(mensagem));
         pos[1, 0] = console.CursorLeft;
         pos[1, 1] = pos[0, 1] + mensagens.Length;
         return pos;
@@ -60,5 +64,16 @@ public class ConsoleManager : IScreenManager
     public void Newline()
     {
         console.Write(Environment.NewLine);
+    }
+
+    private void WriteMessage(Parm message)
+    {
+        var currentColor = console.ForegroundColor;
+        var backgroundColor = console.BackgroundColor;
+        console.ForegroundColor = message.TextColor;
+        console.BackgroundColor = message.BackgroundColor;
+        console.WriteLine(message.Text);
+        console.ForegroundColor = currentColor;
+        console.BackgroundColor = backgroundColor;
     }
 }

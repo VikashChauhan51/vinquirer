@@ -11,4 +11,6 @@ public interface IConsole
     int CursorTop { get; set; }
     int WindowWidth { get; set; }
     bool KeyAvailable { get; }
+    ConsoleColor BackgroundColor { get; set; }
+    ConsoleColor ForegroundColor { get; set; }
 }

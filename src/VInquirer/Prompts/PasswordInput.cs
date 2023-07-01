@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Text;
 using VInquirer.Console;
 using VInquirer.Validators;
@@ -6,7 +7,7 @@ using VInquirer.Validators;
 namespace VInquirer.Prompts;
 public class PasswordInput : Input
 {
-    public PasswordInput(string name, string message, IValidator? validator = null, IScreenManager? consoleRender = null) : base(name, message, validator, consoleRender)
+    public PasswordInput(string name, string message, InquirerSettings? settings = null, IValidator? validator = null, IScreenManager? consoleRender = null) : base(name, message, settings, validator, consoleRender)
     {
     }
 
@@ -19,7 +20,14 @@ public class PasswordInput : Input
             .Subscribe(x =>
             {
                 answer.Append(x.KeyChar);
+                var currentColor = System.Console.ForegroundColor;
+                var backgroundColor = System.Console.BackgroundColor;
+                System.Console.ForegroundColor = settings.OptionTextColor;
+                System.Console.BackgroundColor = settings.BackgroundColor;
                 System.Console.Write('*');
+                System.Console.ForegroundColor = currentColor;
+                System.Console.BackgroundColor = backgroundColor;
+
             });
 
         return answer.ToString();
