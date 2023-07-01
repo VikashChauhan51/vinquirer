@@ -68,12 +68,19 @@ public class ConsoleManager : IScreenManager
 
     private void WriteMessage(Parm message)
     {
-        var currentColor = console.ForegroundColor;
-        var backgroundColor = console.BackgroundColor;
-        console.ForegroundColor = message.TextColor;
-        console.BackgroundColor = message.BackgroundColor;
-        console.WriteLine(message.Text);
-        console.ForegroundColor = currentColor;
-        console.BackgroundColor = backgroundColor;
+        try
+        {
+            var currentColor = console.ForegroundColor;
+            var backgroundColor = console.BackgroundColor;
+            console.ForegroundColor = message.TextColor;
+            console.BackgroundColor = message.BackgroundColor;
+            console.WriteLine(message.Text);
+            console.ForegroundColor = currentColor;
+            console.BackgroundColor = backgroundColor;
+        }
+        catch
+        {
+            console.WriteLine(message.Text);
+        }
     }
 }
