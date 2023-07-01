@@ -1,5 +1,5 @@
 ﻿namespace VInquirer;
-public sealed class InquirerSettings
+public sealed record InquirerSettings
 {
     public ConsoleColor BackgroundColor { get; init; } = ConsoleColor.Black;
     public ConsoleColor DefaultTextColor { get; init; } = ConsoleColor.White;
